@@ -13,4 +13,7 @@ Can you add without modifying existing code?
 ## Notes for the exercise:
 
 Implemented strategy pattern for openness because of which we are able to add "printing to console" feature with very minimal modifications.
-Eliminating if else loops with dictionaries allows flexible extensions.
+Eliminating if else switches with dictionaries allows flexible extensions.
+
+Test coverage is 100%
+Test cases are designed with covering max possible tests at lower levels which are not repeated at higher order functions
