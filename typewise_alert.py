@@ -10,14 +10,14 @@ email_alert_message = {"TOO_LOW": {'recipient': 'bmslowbreachalert@bosch.com',
                                     'alert': "Temperature is too high. Requesting immediate action"}
                        }
 
-DEFAULT_HEADER_VALUE = 0xfeed
-
 
 def check_and_alert(alert_target, battery_char, temperature_in_celsius):
     breach_type = \
         classify_temperature_breach(battery_char['coolingType'], temperature_in_celsius)
     if breach_type != "NORMAL":
         return alert_target_type[alert_target](breach_type)
+    else:
+        return breach_type
 
 
 def classify_temperature_breach(cooling_type, temperature_in_celsius):
@@ -43,8 +43,7 @@ def infer_breach(value, lower_limit, upper_limit):
 
 
 def send_to_controller(breach_type):
-    header = DEFAULT_HEADER_VALUE
-    print(f'{header}, {breach_type} \n \tController Activated')
+    print(f' {breach_type} \n \tController Activated')
     return "CONTROLLER_ACTIVATED"
 
 
@@ -55,7 +54,13 @@ def send_email(breach_type):
     return "EMAIL_SENT"
 
 
+def print_to_console(breach_type):
+    print(f' Cooling temperature : {breach_type} \n \t Breach ALERT!!! Please take necessary corrective measures')
+    return 'CONSOLE_OUTPUT_SENT'
+
+
 alert_target_type = {
     'email': send_email,
-    'controller': send_to_controller
+    'controller': send_to_controller,
+    'console': print_to_console
 }
