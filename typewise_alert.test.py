@@ -20,7 +20,7 @@ class TypewiseTest(unittest.TestCase):
         self.assertTrue(typewise_alert.classify_temperature_breach('HI_ACTIVE_COOLING', 46) == 'TOO_HIGH')
         self.assertTrue(typewise_alert.classify_temperature_breach('MED_ACTIVE_COOLING', 41) == 'TOO_HIGH')
         self.assertTrue(typewise_alert.classify_temperature_breach('PASSIVE_COOLING', 36) == 'TOO_HIGH')
-        self.assertFalse(typewise_alert.classify_temperature_breach('PASSIVE_COOLING', 36) == 'INVALID_INPUT')
+        self.assertTrue(typewise_alert.classify_temperature_breach(None, 36) == 'INVALID_INPUT')
 
     def test_compose_email_yield_right_mail_for_different_breach(self):
         breach_type = 'TOO_HIGH'
