@@ -4,6 +4,7 @@ cooling_types_ranges = {
     "HI_ACTIVE_COOLING": {'lower_limit': 0, 'upper_limit': 45},
 }
 
+
 email_alert_message = {"TOO_LOW": {'recipient': 'bmslowbreachalert@bosch.com',
                                    'alert': "Temperature is too low. Requesting immediate action"},
                        "TOO_HIGH": {'recipient': 'bmshighbreachalert@bosch.com',
@@ -43,16 +44,28 @@ def infer_breach(value, lower_limit, upper_limit):
 
 
 def send_to_controller(breach_type):
+    ### controller sending utility to be added in real use case ###
     controller_action = f' {breach_type} \n \tController Activated'
     print(controller_action)
     return "CONTROLLER_ACTIVATED"
 
 
-def send_email(breach_type):
-    email_message = email_alert_message[breach_type]
-    email_data = f"To {email_message['recipient']},\n \t Dear Technician, \n \t {email_message['alert']}"
+def compose_email(breach_type):
+    return {
+        'To': email_alert_message[breach_type]['recipient'],
+        'Subject': "Breach Alert!!! Requesting Technician for corrective measures",
+        'Body': email_alert_message[breach_type]
+    }
+
+
+def send_email(email_data):
+    ### email sending utility to be added in real use case ###
     print(email_data)
     return "EMAIL_SENT"
+
+
+def compose_and_send_email(breach_type):
+    return send_email(compose_email(breach_type))
 
 
 def print_to_console(breach_type):
@@ -61,7 +74,7 @@ def print_to_console(breach_type):
 
 
 alert_target_type = {
-    'email': send_email,
+    'email': compose_and_send_email,
     'controller': send_to_controller,
     'console': print_to_console
 }

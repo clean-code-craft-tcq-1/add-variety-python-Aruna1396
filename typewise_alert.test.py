@@ -1,6 +1,6 @@
 import unittest
 import typewise_alert
-
+from unittest.mock import patch
 
 class TypewiseTest(unittest.TestCase):
 
@@ -21,11 +21,25 @@ class TypewiseTest(unittest.TestCase):
         self.assertTrue(typewise_alert.classify_temperature_breach('MED_ACTIVE_COOLING', 41) == 'TOO_HIGH')
         self.assertTrue(typewise_alert.classify_temperature_breach('PASSIVE_COOLING', 36) == 'TOO_HIGH')
 
+    def test_compose_email_yield_right_mail_for_different_breach(self):
+        breach_type = 'TOO_HIGH'
+        email_content = {
+            'To': typewise_alert.email_alert_message[breach_type]['recipient'],
+            'Subject': "Breach Alert!!! Requesting Technician for corrective measures",
+            'Body': typewise_alert.email_alert_message[breach_type]
+        }
+        self.assertEqual(typewise_alert.compose_email('TOO_HIGH'), email_content)
+        self.assertNotEqual(typewise_alert.compose_email('TOO_LOW'), email_content)
+
     def test_check_and_alert_yields_apt_alerts_for_breaches(self):
-        self.assertEqual(typewise_alert.check_and_alert('email', {'cooling_type': 'HI_ACTIVE_COOLING'}, -20), 'EMAIL_SENT')
-        self.assertEqual(typewise_alert.check_and_alert('controller', {'cooling_type': 'MED_ACTIVE_COOLING'}, 90), 'CONTROLLER_ACTIVATED')
-        self.assertEqual(typewise_alert.check_and_alert('controller', {'cooling_type': 'HI_ACTIVE_COOLING'}, 40), 'NORMAL')
-        self.assertEqual(typewise_alert.check_and_alert('console', {'cooling_type': 'HI_ACTIVE_COOLING'}, 140), 'CONSOLE_OUTPUT_SENT')
+        self.assertEqual(typewise_alert.check_and_alert('email', {'cooling_type': 'HI_ACTIVE_COOLING'}, -20),
+                         'EMAIL_SENT')
+        self.assertEqual(typewise_alert.check_and_alert('controller', {'cooling_type': 'MED_ACTIVE_COOLING'}, 90),
+                         'CONTROLLER_ACTIVATED')
+        self.assertEqual(typewise_alert.check_and_alert('controller', {'cooling_type': 'HI_ACTIVE_COOLING'}, 40),
+                         'NORMAL')
+        self.assertEqual(typewise_alert.check_and_alert('console', {'cooling_type': 'HI_ACTIVE_COOLING'}, 140),
+                         'CONSOLE_OUTPUT_SENT')
 
 
 if __name__ == '__main__':
