@@ -1,3 +1,5 @@
+import controller_emailer_library as lib
+
 cooling_types_ranges = {
     "PASSIVE_COOLING": {'lower_limit': 0, 'upper_limit': 35},
     "MED_ACTIVE_COOLING": {'lower_limit': 0, 'upper_limit': 40},
@@ -44,10 +46,7 @@ def infer_breach(value, lower_limit, upper_limit):
 
 
 def send_to_controller(breach_type):
-    ### controller sending utility to be added in real use case ###
-    controller_action = f' {breach_type} \n \tController Activated'
-    print(controller_action)
-    return "CONTROLLER_ACTIVATED"
+    return lib.controller_utility(breach_type)
 
 
 def compose_email(breach_type):
@@ -59,9 +58,7 @@ def compose_email(breach_type):
 
 
 def send_email(email_data):
-    ### email sending utility to be added in real use case ###
-    print(email_data)
-    return "EMAIL_SENT"
+    return lib.email_utility(email_data)
 
 
 def compose_and_send_email(breach_type):
