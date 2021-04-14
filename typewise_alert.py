@@ -1,4 +1,4 @@
-import controller_emailer_library as lib
+import controller_mailer_library as lib
 
 cooling_types_ranges = {
     "PASSIVE_COOLING": {'lower_limit': 0, 'upper_limit': 35},
@@ -45,10 +45,6 @@ def infer_breach(value, lower_limit, upper_limit):
     return 'NORMAL'
 
 
-def send_to_controller(breach_type):
-    return lib.controller_utility(breach_type)
-
-
 def compose_email(breach_type):
     return {
         'To': email_alert_message[breach_type]['recipient'],
@@ -63,6 +59,10 @@ def send_email(email_data):
 
 def compose_and_send_email(breach_type):
     return send_email(compose_email(breach_type))
+
+
+def send_to_controller(breach_type):
+    return lib.controller_utility(breach_type)
 
 
 def print_to_console(breach_type):
